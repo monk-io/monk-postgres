@@ -1,0 +1,41 @@
+namespace: monk-postgresql-cluster-pgpool
+
+stack:
+  defines: process-group
+  runnable-list:
+    - monk-postgresql-cluster-pgpool/db1
+    - monk-postgresql-cluster-pgpool/db2
+    - monk-postgresql-cluster-pgpool/dbpool
+  variables:
+    postgresql_image_tag:
+      type: int
+      value: 14
+    pgpool_image_tag:
+      type: int
+      value: 4
+    db1_port: 5433
+    db2_port: 5433
+    db_postgres_password:
+      type: string
+      value: adminpassword
+    db_postgresql_username:
+      type: string
+      value: monk
+    db_postgresql_password:
+      type: string
+      value: monk
+    db_postgresql_name:
+      type: string
+      value: monk
+    db_replication_password:
+      type: string
+      value: monk
+    db_replication_port:
+      type: int
+      value: 5432
+    db1_host:
+      type: string
+      value: <- get-hostname("monk-postgresql-cluster-pgpool/db1", "monk-db1") split(".dns.podman") join("")
+    db2_host:
+      type: string
+      value: <- get-hostname("monk-postgresql-cluster-pgpool/db2", "monk-db2") split(".dns.podman") join("")

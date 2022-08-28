@@ -1,0 +1,18 @@
+namespace: readiness
+
+common:
+  containers:
+    fooc:
+      image: alpine
+      image-tag: latest
+      bash: sleep 60
+
+bar:
+  defines: runnable
+  inherits: ./common
+  checks:
+    readiness:
+      code: |
+          exec("fooc", "ps", "-ef") "sleep" contains?
+      period: 15
+      initialDelay: 5

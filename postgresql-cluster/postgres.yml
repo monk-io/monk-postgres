@@ -1,0 +1,145 @@
+namespace: monk-postgresql-cluster
+
+db1: 
+  defines: runnable
+  variables:
+    postgres_password:
+      env: POSTGRESQL_POSTGRES_PASSWORD
+      type: string
+      value: "adminpassword"
+    db_username:
+      env: POSTGRESQL_USERNAME
+      type: string
+      value: "monk"
+    db_password:
+      env: POSTGRESQL_PASSWORD
+      type: string
+      value: "monk"
+    db_name:
+      env: POSTGRESQL_DATABASE
+      type: string
+      value: "monk"
+    repl_password:
+      env: REPMGR_PASSWORD
+      type: string
+      value: "monk"
+    db1_host:
+      type: string
+      value: <- get-hostname("monk-postgresql-cluster/db1", "monk-db1") split(".dns.podman") join("")
+    db2_host:
+      type: string
+      value: <- get-hostname("monk-postgresql-cluster/db2", "monk-db2") split(".dns.podman") join("")
+    primary_host:
+      env: REPMGR_PRIMARY_HOST
+      type: string
+      value: <- `${db1_host}`
+    primary_port:
+      env: REPMGR_PRIMARY_PORT
+      type: string
+      value: <- $db_repl_port
+    repl_nodes:
+      env: REPMGR_PARTNER_NODES
+      type: string
+      value: <- `${db1_host},${db2_host}`
+    db_repl_port:
+      env: REPMGR_PORT_NUMBER
+      type: string
+      value: 5432
+    node_id:
+      env: REPMGR_NODE_ID
+      value: 1
+    node_name:
+      env: REPMGR_NODE_NAME
+      value: "db-1"
+    network_name:
+      env: REPMGR_NODE_NETWORK_NAME
+      type: string
+      value: <- `${db1_host}`
+    volume_data:
+      type: string
+      value: <- `${monk-volume-path}/postgres`
+  containers:
+    monk-db1:
+      paths:
+        - <- `${volume_data}/db1:/bitnami/postgresql`
+      ports:
+        - <- `0.0.0.0:5435:5432`
+      image: bitnami/postgresql-repmgr
+      # bash: sleep 3600
+      image-tag: <- `${image_tag}`
+    monk-alpine:
+      image: alpine
+      bash: sleep 3600
+
+db2: 
+  defines: runnable
+  variables:
+    postgres_password:
+      env: POSTGRESQL_POSTGRES_PASSWORD
+      type: string
+      value: "adminpassword"
+    db_username:
+      env: POSTGRESQL_USERNAME
+      type: string
+      value: "monk"
+    db_password:
+      env: POSTGRESQL_PASSWORD
+      type: string
+      value: "monk"
+    db_name:
+      env: POSTGRESQL_DATABASE
+      type: string
+      value: "monk"
+    repl_password:
+      env: REPMGR_PASSWORD
+      type: string
+      value: "monk"
+    primary_host:
+      env: REPMGR_PRIMARY_HOST
+      type: string
+      value: <- `${db1_host}`
+    primary_port:
+      env: REPMGR_PRIMARY_PORT
+      type: string
+      value: <- $db_repl_port
+    repl_nodes:
+      env: REPMGR_PARTNER_NODES
+      type: string
+      value: <- `${db1_host},${db2_host}`
+    db_repl_port:
+      env: REPMGR_PORT_NUMBER
+      type: string
+      value: 5432
+    node_id:
+      env: REPMGR_NODE_ID
+      value: 2
+    node_name:
+      env: REPMGR_NODE_NAME
+      value: "db-2"
+    network_name:
+      env: REPMGR_NODE_NETWORK_NAME
+      type: string
+      value: <- `${db2_host}`
+    db1_host:
+      type: string
+      value: <- get-hostname("monk-postgresql-cluster/db1", "monk-db1") split(".dns.podman") join("")
+    db2_host:
+      type: string
+      value: <- get-hostname("monk-postgresql-cluster/db2", "monk-db2") split(".dns.podman") join("")
+    volume_data:
+      type: string
+      value: <- `${monk-volume-path}/postgres`
+  containers:
+    monk-db2:
+      paths:
+        - <- `${volume_data}/db2:/bitnami/postgresql`
+      ports:
+        - <- `0.0.0.0:5436:5432`
+      image: bitnami/postgresql-repmgr
+      # bash: sleep 3600
+      image-tag: <- `${image_tag}`
+
+
+
+
+
