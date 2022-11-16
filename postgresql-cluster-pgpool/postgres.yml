@@ -1,6 +1,13 @@
 namespace: monk-postgresql-cluster-pgpool
 
 db1: 
+  metadata:
+    defines: metadata
+    name: PostgreSQL
+    description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+    website: https://www.postgresql.org
+    publisher: monk.io
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
   defines: runnable
   variables:
     postgres_password:
@@ -69,6 +76,13 @@ db1:
       image-tag: <- `${postgresql_image_tag}`
 
 db2: 
+  metadata:
+    defines: metadata
+    name: PostgreSQL
+    description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+    website: https://www.postgresql.org
+    publisher: monk.io
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
   defines: runnable
   variables:
     postgres_password:
@@ -138,6 +152,13 @@ db2:
     
 
 dbpool:
+  metadata:
+    defines: metadata
+    name: Pgpool
+    description: Pgpool-II is a middleware that works between PostgreSQL servers and a PostgreSQL database client.
+    website: https://www.pgpool.net
+    publisher: monk.io
+    icon: https://pgpool.net/mediawiki/images/pgpool-II_elephant_150x150.png
   defines: runnable
   variables: 
     repl_nodes:

@@ -1,6 +1,13 @@
 namespace: monk-postgresql-cluster
 
-db1: 
+db1:
+  metadata:
+    defines: metadata
+    name: PostgreSQL
+    description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+    website: https://www.postgresql.org
+    publisher: monk.io
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
   defines: runnable
   variables:
     postgres_password:
@@ -72,6 +79,13 @@ db1:
       bash: sleep 3600
 
 db2: 
+  metadata:
+    defines: metadata
+    name: PostgreSQL
+    description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+    website: https://www.postgresql.org
+    publisher: monk.io
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
   defines: runnable
   variables:
     postgres_password:
