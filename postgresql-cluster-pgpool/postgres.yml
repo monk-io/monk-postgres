@@ -1,6 +1,6 @@
 namespace: monk-postgresql-cluster-pgpool
 
-db1: 
+postgres-common:
   metadata:
     defines: metadata
     name: PostgreSQL
@@ -8,34 +8,40 @@ db1:
     website: https://www.postgresql.org
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
-  defines: runnable
+  connections:
+    db1:
+      runnable: monk-postgresql-cluster-pgpool/db1
+      service: postgres-svc
+    db2:
+      runnable: monk-postgresql-cluster-pgpool/db2
+      service: postgres-svc
   variables:
     postgres_password:
       env: POSTGRESQL_POSTGRES_PASSWORD
       type: string
-      value: <- $db_postgres_password
+      value: "adminpassword"
     db_username:
       env: POSTGRESQL_USERNAME
       type: string
-      value: <- $db_postgresql_username
+      value: "monk"
     db_password:
       env: POSTGRESQL_PASSWORD
       type: string
-      value: <- $db_postgresql_password
+      value: "monk"
     db_name:
       env: POSTGRESQL_DATABASE
       type: string
-      value: <- $db_postgresql_name
+      value: "monk"
     repl_password:
       env: REPMGR_PASSWORD
       type: string
-      value: <- $db_replication_password
+      value: "monk"
     db1_host:
       type: string
-      value: <- get-hostname("monk-postgresql-cluster-pgpool/db1", "monk-db1") split(".dns.podman") join("")
+      value: <- connection-hostname("db1") split(".dns.podman") join("")
     db2_host:
       type: string
-      value: <- get-hostname("monk-postgresql-cluster-pgpool/db2", "monk-db2") split(".dns.podman") join("")
+      value: <- connection-hostname("db2") split(".dns.podman") join("")
     primary_host:
       env: REPMGR_PRIMARY_HOST
       type: string
@@ -47,11 +53,24 @@ db1:
     repl_nodes:
       env: REPMGR_PARTNER_NODES
       type: string
-      value: <- `${db1_host}:${db_replication_port},${db2_host}:${db_replication_port}`
+      value: <- `${db1_host},${db2_host}`
     db_repl_port:
       env: REPMGR_PORT_NUMBER
       type: string
-      value: <- $db_replication_port
+      value: 5432
+    volume_data:
+      type: string
+      value: <- `${monk-volume-path}/postgres`
+  services:
+    postgres-svc:
+      container: postgres
+      port: <- `${db_repl_port}`
+      protocol: tcp
+
+db1:
+  defines: runnable
+  inherits: monk-postgresql-cluster-pgpool/postgres-common
+  variables:
     node_id:
       env: REPMGR_NODE_ID
       value: 1
@@ -62,71 +81,18 @@ db1:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
       value: <- `${db1_host}`
-    volume_data:
-      type: string
-      value: <- `${monk-volume-path}/postgres`
   containers:
-    monk-db1:
+    postgres:
       paths:
         - <- `${volume_data}/db1:/bitnami/postgresql`
       ports:
         - <- `0.0.0.0:5435:5432`
       image: bitnami/postgresql-repmgr
-      # bash: sleep 3600
       image-tag: <- `${postgresql_image_tag}`
-
-db2: 
-  metadata:
-    defines: metadata
-    name: PostgreSQL
-    description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
-    website: https://www.postgresql.org
-    publisher: monk.io
-    icon: https://www.postgresql.org/media/img/about/press/elephant.png
+db2:
   defines: runnable
+  inherits: monk-postgresql-cluster-pgpool/postgres-common
   variables:
-    postgres_password:
-      env: POSTGRESQL_POSTGRES_PASSWORD
-      type: string
-      value: <- $db_postgres_password
-    db_username:
-      env: POSTGRESQL_USERNAME
-      type: string
-      value: <- $db_postgresql_username
-    db_password:
-      env: POSTGRESQL_PASSWORD
-      type: string
-      value: <- $db_postgresql_password
-    db_name:
-      env: POSTGRESQL_DATABASE
-      type: string
-      value: <- $db_postgresql_name
-    repl_password:
-      env: REPMGR_PASSWORD
-      type: string
-      value: <- $db_replication_password
-    db1_host:
-      type: string
-      value: <- get-hostname("monk-postgresql-cluster-pgpool/db1", "monk-db1") split(".dns.podman") join("")
-    db2_host:
-      type: string
-      value: <- get-hostname("monk-postgresql-cluster-pgpool/db2", "monk-db2") split(".dns.podman") join("")
-    primary_host:
-      env: REPMGR_PRIMARY_HOST
-      type: string
-      value: <- `${db1_host}`
-    primary_port:
-      env: REPMGR_PRIMARY_PORT
-      type: string
-      value: <- $db_repl_port
-    repl_nodes:
-      env: REPMGR_PARTNER_NODES
-      type: string
-      value: <- `${db1_host}:${db_replication_port},${db2_host}:${db_replication_port}`
-    db_repl_port:
-      env: REPMGR_PORT_NUMBER
-      type: string
-      value: <- $db_replication_port
     node_id:
       env: REPMGR_NODE_ID
       value: 2
@@ -137,19 +103,15 @@ db2:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
       value: <- `${db2_host}`
-    volume_data:
-      type: string
-      value: <- `${monk-volume-path}/postgres`
   containers:
-    monk-db2:
-      ports:
-        - <- `0.0.0.0:5436:5432`
+    postgres:
       paths:
         - <- `${volume_data}/db2:/bitnami/postgresql`
+      ports:
+        - <- `0.0.0.0:5436:5432`
       image: bitnami/postgresql-repmgr
-      # bash: sleep 3600
       image-tag: <- `${postgresql_image_tag}`
-    
+
 
 dbpool:
   metadata:
@@ -160,7 +122,20 @@ dbpool:
     publisher: monk.io
     icon: https://pgpool.net/mediawiki/images/pgpool-II_elephant_150x150.png
   defines: runnable
+  connections:
+    db1:
+      runnable: monk-postgresql-cluster-pgpool/db1
+      service: postgres-svc
+    db2:
+      runnable: monk-postgresql-cluster-pgpool/db2
+      service: postgres-svc
   variables: 
+    db1_host:
+      type: string
+      value: <- connection-hostname("db1") split(".dns.podman") join("")
+    db2_host:
+      type: string
+      value: <- connection-hostname("db2") split(".dns.podman") join("")
     repl_nodes:
       env: PGPOOL_BACKEND_NODES
       type: string
@@ -199,7 +174,9 @@ dbpool:
       image-tag: <- `${pgpool_image_tag}`
       ports:
         - 5440:5432
-    monk-alpine:
-      image: alpine
-      bash: sleep 3600
-
+  services:
+    postgres-pgpool:
+      container: pgpool
+      port: 5432
+      protocol: tcp
+      host-port: 5440

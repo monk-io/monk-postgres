@@ -33,9 +33,3 @@ stack:
     db_replication_port:
       type: int
       value: 5432
-    db1_host:
-      type: string
-      value: <- get-hostname("monk-postgresql-cluster-pgpool/db1", "monk-db1") split(".dns.podman") join("")
-    db2_host:
-      type: string
-      value: <- get-hostname("monk-postgresql-cluster-pgpool/db2", "monk-db2") split(".dns.podman") join("")
