@@ -1,2 +1,2 @@
 REPO monk-postgres
-DIR postgresql-cluster postgresql-cluster-pgpool
+DIR monk-postgresql postgresql-cluster postgresql-cluster-pgpool
