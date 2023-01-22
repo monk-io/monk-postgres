@@ -1,13 +1,16 @@
 # Postgresql Master Slave & Monk
+
 This repository contains Monk.io template to deploy Postgresql Master Slave cluster either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
-# Prerequisites
+## Prerequisites
+
 - [Install Monk](https://docs.monk.io/docs/get-monk)
 - [Register and Login Monk](https://docs.monk.io/docs/acc-and-auth)
 - [Add Cloud Provider](https://docs.monk.io/docs/cloud-provider)
 - [Add Instance](https://docs.monk.io/docs/multi-cloud)
 
-#### Make sure monkd is running.
+## Make sure monkd is running
+
 ```bash
 foo@bar:~$ monk status
 daemon: ready
@@ -16,18 +19,20 @@ not connected to cluster
 ```
 
 ## Clone Repository
+
 ```bash
 git clone https://github.com/monk-io/monk-postgresql
 ```
 
 ## Load Template
+
 ```bash
 cd postgresql-cluster
 monk load MANIFEST
 ```
 
+## Let's take a look at the themes I have installed
 
-#### Let's take a look at the themes I have installed.
 ```bash
 foo@bar:~$ monk list monk-postgresql-cluster
 ✔ Got the list
@@ -40,6 +45,7 @@ group     monk-postgresql-cluster/stack   local       -        -
 ```
 
 ## Deploy Stack
+
 ```bash
 foo@bar:~$ monk run monk-postgresql-cluster/stack
 ? Select tag to run [local/monk-postgresql-cluster/stack] on: postgres
@@ -75,29 +81,26 @@ foo@bar:~$ monk run monk-postgresql-cluster/stack
           └─🔌 open 16.170.37.16:5440 -> 5432
 
 💡 You can inspect and manage your above stack with these commands:
-	monk logs (-f) local/monk-postgresql-cluster-pgpool/stack - Inspect logs
-	monk shell     local/monk-postgresql-cluster-pgpool/stack - Connect to the container's shell
-	monk do        local/monk-postgresql-cluster-pgpool/stack/action_name - Run defined action (if exists)
+ monk logs (-f) local/monk-postgresql-cluster-pgpool/stack - Inspect logs
+ monk shell     local/monk-postgresql-cluster-pgpool/stack - Connect to the container's shell
+ monk do        local/monk-postgresql-cluster-pgpool/stack/action_name - Run defined action (if exists)
 💡 Check monk help for more!
 ```
 
-
 ## Variables
+
 The variables are in `stack.yml` file. You can quickly setup by editing the values here.
 
-| Variable                     	| Description                               	|
-|------------------------------	|-------------------------------------------	|
-| postgresql_image_tag          	| Porsgresql image version 	               |
-| pgpool_image_tag             	| Pgpool image version                      	|
-| db_postgres_password        	| Postgres User's password 	|
-| db_postgresql_username         | Db user           	|
-| db_postgresql_password        	| Db password         	|
-| db_postgresql_name          	| Database name 	|
-| db_replication_password        | Replication password     	|
-| db_replication_port          	| Replication port     	|
-
-
-## 
+| Variable                      | Description               |
+|------------------------------ |---------------------------|
+| postgresql_image_tag          | Porsgresql image version  |
+| pgpool_image_tag              | Pgpool image version      |
+| db_postgres_password          | Postgres User's password  |
+| db_postgresql_username        | Db user                   |
+| db_postgresql_password        | Db password               |
+| db_postgresql_name            | Database name             |
+| db_replication_password       | Replication password      |
+| db_replication_port           | Replication port          |
 
 ## Stop, remove and clean up workloads and templates
 

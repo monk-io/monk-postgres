@@ -1,5 +1,5 @@
+---
 namespace: monk-postgresql-cluster-pgpool
-
 postgres-common:
   metadata:
     defines: metadata
@@ -19,23 +19,23 @@ postgres-common:
     postgres_password:
       env: POSTGRESQL_POSTGRES_PASSWORD
       type: string
-      value: "adminpassword"
+      value: adminpassword
     db_username:
       env: POSTGRESQL_USERNAME
       type: string
-      value: "monk"
+      value: monk
     db_password:
       env: POSTGRESQL_PASSWORD
       type: string
-      value: "monk"
+      value: monk
     db_name:
       env: POSTGRESQL_DATABASE
       type: string
-      value: "monk"
+      value: monk
     repl_password:
       env: REPMGR_PASSWORD
       type: string
-      value: "monk"
+      value: monk
     db1_host:
       type: string
       value: <- connection-hostname("db1") split(".dns.podman") join("")
@@ -66,7 +66,6 @@ postgres-common:
       container: postgres
       port: <- `${db_repl_port}`
       protocol: tcp
-
 db1:
   defines: runnable
   inherits: monk-postgresql-cluster-pgpool/postgres-common
@@ -76,7 +75,7 @@ db1:
       value: 1
     node_name:
       env: REPMGR_NODE_NAME
-      value: "db-1"
+      value: db-1
     network_name:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
@@ -98,7 +97,7 @@ db2:
       value: 2
     node_name:
       env: REPMGR_NODE_NAME
-      value: "db-2"
+      value: db-2
     network_name:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
@@ -111,8 +110,6 @@ db2:
         - <- `0.0.0.0:5436:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${postgresql_image_tag}`
-
-
 dbpool:
   metadata:
     defines: metadata
@@ -129,7 +126,7 @@ dbpool:
     db2:
       runnable: monk-postgresql-cluster-pgpool/db2
       service: postgres-svc
-  variables: 
+  variables:
     db1_host:
       type: string
       value: <- connection-hostname("db1") split(".dns.podman") join("")
@@ -155,7 +152,7 @@ dbpool:
     pool_ldap:
       env: PGPOOL_ENABLE_LDAP
       type: string
-      value: no
+      value: false
     pool_admin_username:
       env: PGPOOL_ADMIN_USERNAME
       type: string
@@ -167,7 +164,7 @@ dbpool:
     pool_enable_lb:
       env: PGPOOL_ENABLE_LOAD_BALANCING
       type: string
-      value: yes
+      value: true
   containers:
     pgpool:
       image: docker.io/bitnami/pgpool

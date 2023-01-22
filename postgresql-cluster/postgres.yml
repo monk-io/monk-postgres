@@ -1,13 +1,15 @@
+---
 namespace: monk-postgresql-cluster
 
 postgres-common:
+
   metadata:
-    defines: metadata
     name: PostgreSQL
     description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
     website: https://www.postgresql.org
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
+
   connections:
     db1:
       runnable: monk-postgresql-cluster/db1
@@ -15,27 +17,28 @@ postgres-common:
     db2:
       runnable: monk-postgresql-cluster/db2
       service: postgres-svc
+
   variables:
     postgres_password:
       env: POSTGRESQL_POSTGRES_PASSWORD
       type: string
-      value: "adminpassword"
+      value: adminpassword
     db_username:
       env: POSTGRESQL_USERNAME
       type: string
-      value: "monk"
+      value: monk
     db_password:
       env: POSTGRESQL_PASSWORD
       type: string
-      value: "monk"
+      value: monk
     db_name:
       env: POSTGRESQL_DATABASE
       type: string
-      value: "monk"
+      value: monk
     repl_password:
       env: REPMGR_PASSWORD
       type: string
-      value: "monk"
+      value: monk
     db1_host:
       type: string
       value: <- connection-hostname("db1") split(".dns.podman") join("")
@@ -70,17 +73,19 @@ postgres-common:
 db1:
   defines: runnable
   inherits: monk-postgresql-cluster/postgres-common
+
   variables:
     node_id:
       env: REPMGR_NODE_ID
       value: 1
     node_name:
       env: REPMGR_NODE_NAME
-      value: "db-1"
+      value: db-1
     network_name:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
       value: <- `${db1_host}`
+
   containers:
     postgres:
       paths:
@@ -89,20 +94,23 @@ db1:
         - <- `0.0.0.0:5435:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${image_tag}`
+
 db2:
   defines: runnable
   inherits: monk-postgresql-cluster/postgres-common
+
   variables:
     node_id:
       env: REPMGR_NODE_ID
       value: 2
     node_name:
       env: REPMGR_NODE_NAME
-      value: "db-2"
+      value: db-2
     network_name:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
       value: <- `${db2_host}`
+
   containers:
     postgres:
       paths:
@@ -111,8 +119,3 @@ db2:
         - <- `0.0.0.0:5436:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${image_tag}`
-
-
-
-
-
