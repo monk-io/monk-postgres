@@ -1,5 +1,6 @@
 ---
 namespace: monk-postgresql-cluster-pgpool
+
 postgres-common:
   metadata:
     defines: metadata
@@ -164,7 +165,7 @@ dbpool:
     pool_enable_lb:
       env: PGPOOL_ENABLE_LOAD_BALANCING
       type: string
-      value: true
+      value: "yes"
   containers:
     pgpool:
       image: docker.io/bitnami/pgpool
