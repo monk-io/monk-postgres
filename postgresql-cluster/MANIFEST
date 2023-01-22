@@ -1,2 +1,2 @@
 repo postgres
-LOAD postgres.yml stack.yml 
+LOAD postgres.yml stack.yml
