@@ -27,19 +27,19 @@ git clone https://github.com/monk-io/monk-postgresql
 ## Load Template
 
 ```bash
-cd postgresql-cluster
+cd monk-postgresql/postgresql-cluster
 monk load MANIFEST
 ```
 
 ## Let's take a look at the themes I have installed
 
 ```bash
-foo@bar:~$ monk list monk-postgresql-cluster
+foo@bar:~$ monk list postgresql-cluster
 ✔ Got the list
 Type      Template                               Repository  Version  Tags
-runnable  monk-postgresql-cluster/db1     local       -        -
-runnable  monk-postgresql-cluster/db2     local       -        -
-group     monk-postgresql-cluster/stack   local       -        -
+runnable  postgresql-cluster/db1     local       -        -
+runnable  postgresql-cluster/db2     local       -        -
+group     postgresql-cluster/stack   local       -        -
 
 
 ```
@@ -47,9 +47,9 @@ group     monk-postgresql-cluster/stack   local       -        -
 ## Deploy Stack
 
 ```bash
-foo@bar:~$ monk run monk-postgresql-cluster/stack
-? Select tag to run [local/monk-postgresql-cluster/stack] on: postgres
-✔ Starting the job: local/monk-postgresql-cluster/stack... DONE
+foo@bar:~$ monk run postgresql-cluster/stack
+? Select tag to run [local/postgresql-cluster/stack] on: postgres
+✔ Starting the job: local/postgresql-cluster/stack... DONE
 ✔ Preparing nodes DONE
 ✔ Checking/pulling images...
 ✔ [================================================] 100% docker.io/bitnami/postgresql-repmgr:14 db-2
@@ -58,32 +58,32 @@ foo@bar:~$ monk run monk-postgresql-cluster/stack
 ✔ Starting containers DONE
 ✔ Starting containers DONE
 
-🔩 templates/local/monk-postgresql-cluster-pgpool/stack
+🔩 templates/local/postgresql-cluster-pgpool/stack
  ├─🧊 Peer db-1
- │  └─🔩 templates/local/monk-postgresql-cluster-pgpool/db2
+ │  └─🔩 templates/local/postgresql-cluster-pgpool/db2
  │     └─📦 94d61b60bab748ad44be532c4b2338cc-ql-cluster-pgpool-db2-monk-db2
  │        ├─🧩 docker.io/bitnami/postgresql-repmgr:14
  │        ├─💾 /var/lib/monkd/volumes/postgres/db2 -> /bitnami/postgresql
  │        └─🔌 open 13.50.15.241:5436 (0.0.0.0:5436) -> 5432
  ├─🧊 Peer db-3
- │  └─🔩 templates/local/monk-postgresql-cluster-pgpool/db1
+ │  └─🔩 templates/local/postgresql-cluster-pgpool/db1
  │     └─📦 1df4dde31d6943e0a4dd8ce576742e3a-ql-cluster-pgpool-db1-monk-db1
  │        ├─🧩 docker.io/bitnami/postgresql-repmgr:14
  │        ├─💾 /var/lib/monkd/volumes/postgres/db1 -> /bitnami/postgresql
  │        └─🔌 open 16.170.222.245:5435 (0.0.0.0:5435) -> 5432
  └─🧊 Peer db-2
-    ├─🔩 templates/local/monk-postgresql-cluster-pgpool/dbpool
+    ├─🔩 templates/local/postgresql-cluster-pgpool/dbpool
     │  └─📦 16157a94ba45b83b8bd9f035a4bc0df2-ster-pgpool-dbpool-monk-alpine
     │     └─🧩 docker.io/library/alpine:latest
-    └─🔩 templates/local/monk-postgresql-cluster-pgpool/dbpool
+    └─🔩 templates/local/postgresql-cluster-pgpool/dbpool
        └─📦 8309ac085fb3fe18be0793bb166a0375-l-cluster-pgpool-dbpool-pgpool
           ├─🧩 docker.io/bitnami/pgpool:4
           └─🔌 open 16.170.37.16:5440 -> 5432
 
 💡 You can inspect and manage your above stack with these commands:
- monk logs (-f) local/monk-postgresql-cluster-pgpool/stack - Inspect logs
- monk shell     local/monk-postgresql-cluster-pgpool/stack - Connect to the container's shell
- monk do        local/monk-postgresql-cluster-pgpool/stack/action_name - Run defined action (if exists)
+ monk logs (-f) local/postgresql-cluster-pgpool/stack - Inspect logs
+ monk shell     local/postgresql-cluster-pgpool/stack - Connect to the container's shell
+ monk do        local/postgresql-cluster-pgpool/stack/action_name - Run defined action (if exists)
 💡 Check monk help for more!
 ```
 
@@ -105,5 +105,5 @@ The variables are in `stack.yml` file. You can quickly setup by editing the valu
 ## Stop, remove and clean up workloads and templates
 
 ```bash
-monk purge -x monk-postgresql-cluster-pgpool/stack monk-postgresql-cluster-pgpool/db1 monk-postgresql-cluster-pgpool/db2
+monk purge -x postgresql-cluster-pgpool/stack postgresql-cluster-pgpool/db1 postgresql-cluster-pgpool/db2
 ```

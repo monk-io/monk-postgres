@@ -1,13 +1,13 @@
 ---
-namespace: monk-postgresql-cluster-pgpool
+namespace: postgresql-cluster-pgpool
 
 stack:
   defines: process-group
 
   runnable-list:
-    - monk-postgresql-cluster-pgpool/db1
-    - monk-postgresql-cluster-pgpool/db2
-    - monk-postgresql-cluster-pgpool/dbpool
+    - postgresql-cluster-pgpool/db1
+    - postgresql-cluster-pgpool/db2
+    - postgresql-cluster-pgpool/dbpool
 
   variables:
     postgresql_image_tag:
