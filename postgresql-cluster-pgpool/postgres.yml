@@ -1,5 +1,5 @@
 ---
-namespace: monk-postgresql-cluster-pgpool
+namespace: postgresql-cluster-pgpool
 
 postgres-common:
   metadata:
@@ -11,10 +11,10 @@ postgres-common:
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
   connections:
     db1:
-      runnable: monk-postgresql-cluster-pgpool/db1
+      runnable: postgresql-cluster-pgpool/db1
       service: postgres-svc
     db2:
-      runnable: monk-postgresql-cluster-pgpool/db2
+      runnable: postgresql-cluster-pgpool/db2
       service: postgres-svc
   variables:
     postgres_password:
@@ -69,7 +69,7 @@ postgres-common:
       protocol: tcp
 db1:
   defines: runnable
-  inherits: monk-postgresql-cluster-pgpool/postgres-common
+  inherits: postgresql-cluster-pgpool/postgres-common
   variables:
     node_id:
       env: REPMGR_NODE_ID
@@ -91,7 +91,7 @@ db1:
       image-tag: <- `${postgresql_image_tag}`
 db2:
   defines: runnable
-  inherits: monk-postgresql-cluster-pgpool/postgres-common
+  inherits: postgresql-cluster-pgpool/postgres-common
   variables:
     node_id:
       env: REPMGR_NODE_ID
@@ -122,10 +122,10 @@ dbpool:
   defines: runnable
   connections:
     db1:
-      runnable: monk-postgresql-cluster-pgpool/db1
+      runnable: postgresql-cluster-pgpool/db1
       service: postgres-svc
     db2:
-      runnable: monk-postgresql-cluster-pgpool/db2
+      runnable: postgresql-cluster-pgpool/db2
       service: postgres-svc
   variables:
     db1_host:

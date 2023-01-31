@@ -1,5 +1,5 @@
 ---
-namespace: monk-postgresql-cluster
+namespace: postgresql-cluster
 
 postgres-common:
 
@@ -12,10 +12,10 @@ postgres-common:
 
   connections:
     db1:
-      runnable: monk-postgresql-cluster/db1
+      runnable: postgresql-cluster/db1
       service: postgres-svc
     db2:
-      runnable: monk-postgresql-cluster/db2
+      runnable: postgresql-cluster/db2
       service: postgres-svc
 
   variables:
@@ -72,7 +72,7 @@ postgres-common:
 
 db1:
   defines: runnable
-  inherits: monk-postgresql-cluster/postgres-common
+  inherits: postgresql-cluster/postgres-common
 
   variables:
     node_id:
@@ -97,7 +97,7 @@ db1:
 
 db2:
   defines: runnable
-  inherits: monk-postgresql-cluster/postgres-common
+  inherits: postgresql-cluster/postgres-common
 
   variables:
     node_id:

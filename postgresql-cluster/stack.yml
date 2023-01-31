@@ -1,12 +1,12 @@
 ---
-namespace: monk-postgresql-cluster
+namespace: postgresql-cluster
 
 stack:
   defines: process-group
 
   runnable-list:
-    - monk-postgresql-cluster/db1
-    - monk-postgresql-cluster/db2
+    - postgresql-cluster/db1
+    - postgresql-cluster/db2
 
   variables:
     image_tag:

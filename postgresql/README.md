@@ -27,40 +27,40 @@ git clone https://github.com/monk-io/monk-postgresql
 ## Load Template
 
 ```bash
-cd monk-postgresql/monk-postgresql
+cd monk-postgresql/postgresql
 monk load MANIFEST
 ```
 
 ## Let's take a look at the themes I have installed
 
 ```bash
-foo@bar:~$ monk list monk-postgresql
+foo@bar:~$ monk list postgresql
 ✔ Got the list
 Type      Template            Repository  Version  Tags
-runnable  monk-postgresql/db  local       -        -
+runnable  postgresql/db  local       -        -
 ```
 
 ## Deploy Stack
 
 ```bash
-foo@bar:~$ monk run monk-postgresql/db
-✔ Starting the job: local/monk-postgresql/db... DONE
+foo@bar:~$ monk run postgresql/db
+✔ Starting the job: local/postgresql/db... DONE
 ✔ Preparing nodes DONE
 ✔ Checking/pulling images DONE
-✔ Started local/monk-postgresql/db
+✔ Started local/postgresql/db
 
-🔩 templates/local/monk-postgresql/db
+🔩 templates/local/postgresql/db
  └─🧊 Peer monk-3
-    └─🔩 templates/local/monk-postgresql/db
+    └─🔩 templates/local/postgresql/db
        └─📦 4020138f7583d57965317076d49641a0-al-monk-postgresql-db-postgres
           ├─🧩 postgres:12.2
           ├─💾 /var/lib/monkd/volumes/postgres/db1 -> /var/lib/postgresql/data
           └─🔌 open 16.171.22.57:5435 (0.0.0.0:5435) -> 5432
 
 💡 You can inspect and manage your above stack with these commands:
-	monk logs (-f) local/monk-postgresql/db - Inspect logs
-	monk shell     local/monk-postgresql/db - Connect to the container's shell
-	monk do        local/monk-postgresql/db/action_name - Run defined action (if exists)
+	monk logs (-f) local/postgresql/db - Inspect logs
+	monk shell     local/postgresql/db - Connect to the container's shell
+	monk do        local/postgresql/db/action_name - Run defined action (if exists)
 💡 Check monk help for more!
 ```
 
@@ -80,5 +80,5 @@ The variables are stack section in `redis.yml` file. You can quickly setup by ed
 ## Stop, remove and clean up workloads and templates
 
 ```bash
-monk purge -a monk-postgresql/db
+monk purge -a postgresql/db
 ```
