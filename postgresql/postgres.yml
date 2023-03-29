@@ -1,15 +1,15 @@
 ---
 namespace: postgresql
 
-db:
+common:
   defines: runnable
-
   metadata:
     name: PostgreSQL
     description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
     website: https://www.postgresql.org
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
+    private: true
 
   variables:
     image_tag:
@@ -35,13 +35,30 @@ db:
     postgres:
       paths:
         - <- `${volume_data}/db1:/var/lib/postgresql/data`
-      ports:
-        - <- `0.0.0.0:5435:5432`
       image: postgres
       image-tag: <- `${image_tag}`
 
   services:
     postgres-svc:
       container: postgres
+      port: 5432
+      protocol: tcp
+
+db:
+  defines: runnable
+  inherits: postgresql/common
+
+  metadata:
+    private: false
+
+  containers:
+    postgres:
+      ports:
+        - 5432:5432
+
+  services:
+    postgres-ext:
+      container: postgres
+      host-port: 5432
       port: 5432
       protocol: tcp
