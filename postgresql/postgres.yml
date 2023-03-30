@@ -38,7 +38,7 @@ base:
 
 db:
   defines: runnable
-  inherits: postgresql/common
+  inherits: postgresql/base
   metadata:
     private: false
   containers:
