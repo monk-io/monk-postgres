@@ -67,6 +67,7 @@ postgres-common:
       container: postgres
       port: <- `${db_repl_port}`
       protocol: tcp
+
 db1:
   defines: runnable
   inherits: postgresql-cluster-pgpool/postgres-common
@@ -89,6 +90,7 @@ db1:
         - <- `0.0.0.0:5435:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${postgresql_image_tag}`
+
 db2:
   defines: runnable
   inherits: postgresql-cluster-pgpool/postgres-common
@@ -111,6 +113,7 @@ db2:
         - <- `0.0.0.0:5436:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${postgresql_image_tag}`
+
 dbpool:
   metadata:
     defines: metadata
@@ -165,7 +168,7 @@ dbpool:
     pool_enable_lb:
       env: PGPOOL_ENABLE_LOAD_BALANCING
       type: string
-      value: "yes"
+      value: 'yes'
   containers:
     pgpool:
       image: docker.io/bitnami/pgpool

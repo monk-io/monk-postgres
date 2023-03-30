@@ -3,16 +3,14 @@ namespace: postgresql-cluster
 
 stack:
   defines: process-group
-
   runnable-list:
     - postgresql-cluster/db1
     - postgresql-cluster/db2
-
   variables:
     image_tag:
       type: int
       value: 14
-    db1_port: 
+    db1_port:
       type: int
       value: 5432
     db2_port:

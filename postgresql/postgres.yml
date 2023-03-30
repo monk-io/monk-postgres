@@ -1,7 +1,7 @@
 ---
 namespace: postgresql
 
-common:
+base:
   defines: runnable
   metadata:
     name: PostgreSQL
@@ -10,7 +10,6 @@ common:
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
     private: true
-
   variables:
     image_tag:
       type: string
@@ -30,7 +29,6 @@ common:
     volume_data:
       type: string
       value: <- `${monk-volume-path}/postgres`
-
   containers:
     postgres:
       paths:
@@ -38,25 +36,20 @@ common:
       image: postgres
       image-tag: <- `${image_tag}`
 
+db:
+  defines: runnable
+  inherits: postgresql/common
+  metadata:
+    private: false
+  containers:
+    postgres:
+      ports:
+        - 5432:5432
   services:
     postgres-svc:
       container: postgres
       port: 5432
       protocol: tcp
-
-db:
-  defines: runnable
-  inherits: postgresql/common
-
-  metadata:
-    private: false
-
-  containers:
-    postgres:
-      ports:
-        - 5432:5432
-
-  services:
     postgres-ext:
       container: postgres
       host-port: 5432

@@ -68,14 +68,13 @@ foo@bar:~$ monk run postgresql/db
 
 The variables are stack section in `redis.yml` file. You can quickly setup by editing the values here.
 
-| Variable                  | Description                      | Default                        |
-|---------------------------|----------------------------------|--------------------------------|
-| image_tag                 | Docker image tag                 | 12.2                           |
-| postgres_password         | Postgresql Password              | adminpassword                  |
-| db_username               | Postgresql user name             | monk                           |
-| db_name                   | postgresql db name               | monk                           |
-| volume_data               | Postgresql local volume path     | ${monk-volume-path}/postgres   |
-
+| Variable          | Description                  | Default                      |
+| ----------------- | ---------------------------- | ---------------------------- |
+| image_tag         | Docker image tag             | 12.2                         |
+| postgres_password | Postgresql Password          | adminpassword                |
+| db_username       | Postgresql user name         | monk                         |
+| db_name           | postgresql db name           | monk                         |
+| volume_data       | Postgresql local volume path | ${monk-volume-path}/postgres |
 
 ## Stop, remove and clean up workloads and templates
 
