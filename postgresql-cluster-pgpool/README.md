@@ -90,16 +90,16 @@ foo@bar:~$ monk run postgresql-cluster-pgpool/stack
 
 The variables are in `stack.yml` file. You can quickly setup by editing the values here.
 
-| Variable                      | Description               |
-|-------------------------------|---------------------------|
-| postgresql_image_tag          | Porsgresql image version  |
-| pgpool_image_tag              | Pgpool image version      |
-| db_postgres_password          | Postgres User's password  |
-| db_postgresql_username        | Db user                   |
-| db_postgresql_password        | Db password               |
-| db_postgresql_name            | Database name             |
-| db_replication_password       | Replication password      |
-| db_replication_port           | Replication port          |
+| Variable                | Description              |
+| ----------------------- | ------------------------ |
+| postgresql_image_tag    | Porsgresql image version |
+| pgpool_image_tag        | Pgpool image version     |
+| db_postgres_password    | Postgres User's password |
+| db_postgresql_username  | Db user                  |
+| db_postgresql_password  | Db password              |
+| db_postgresql_name      | Database name            |
+| db_replication_password | Replication password     |
+| db_replication_port     | Replication port         |
 
 ## Stop, remove and clean up workloads and templates
 

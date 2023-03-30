@@ -3,12 +3,10 @@ namespace: postgresql-cluster-pgpool
 
 stack:
   defines: process-group
-
   runnable-list:
     - postgresql-cluster-pgpool/db1
     - postgresql-cluster-pgpool/db2
     - postgresql-cluster-pgpool/dbpool
-
   variables:
     postgresql_image_tag:
       type: int

@@ -2,14 +2,12 @@
 namespace: postgresql-cluster
 
 postgres-common:
-
   metadata:
     name: PostgreSQL
     description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
     website: https://www.postgresql.org
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
-
   connections:
     db1:
       runnable: postgresql-cluster/db1
@@ -17,7 +15,6 @@ postgres-common:
     db2:
       runnable: postgresql-cluster/db2
       service: postgres-svc
-
   variables:
     postgres_password:
       env: POSTGRESQL_POSTGRES_PASSWORD
@@ -73,7 +70,6 @@ postgres-common:
 db1:
   defines: runnable
   inherits: postgresql-cluster/postgres-common
-
   variables:
     node_id:
       env: REPMGR_NODE_ID
@@ -85,7 +81,6 @@ db1:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
       value: <- `${db1_host}`
-
   containers:
     postgres:
       paths:
@@ -98,7 +93,6 @@ db1:
 db2:
   defines: runnable
   inherits: postgresql-cluster/postgres-common
-
   variables:
     node_id:
       env: REPMGR_NODE_ID
@@ -110,7 +104,6 @@ db2:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
       value: <- `${db2_host}`
-
   containers:
     postgres:
       paths:
