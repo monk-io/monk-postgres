@@ -31,8 +31,6 @@ base:
       value: <- `${monk-volume-path}/postgres`
   containers:
     postgres:
-      paths:
-        - <- `${volume_data}/db1:/var/lib/postgresql/data`
       image: postgres
       image-tag: <- `${image_tag}`
 
@@ -43,6 +41,8 @@ db:
     private: false
   containers:
     postgres:
+      paths:
+        - <- `${volume_data}/postgresql:/var/lib/postgresql/data`
       ports:
         - 5432:5432
   services:
