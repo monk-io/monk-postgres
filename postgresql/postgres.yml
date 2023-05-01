@@ -39,12 +39,6 @@ db:
   inherits: postgresql/base
   metadata:
     private: false
-  containers:
-    postgres:
-      paths:
-        - <- `${volume_data}/postgresql:/var/lib/postgresql/data`
-      ports:
-        - 5432:5432
   services:
     postgres-svc:
       container: postgres

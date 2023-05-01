@@ -84,10 +84,6 @@ db1:
       value: <- `${db1_host}`
   containers:
     postgres:
-      paths:
-        - <- `${volume_data}/db1:/bitnami/postgresql`
-      ports:
-        - <- `0.0.0.0:5435:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${postgresql_image_tag}`
 
@@ -107,10 +103,6 @@ db2:
       value: <- `${db2_host}`
   containers:
     postgres:
-      paths:
-        - <- `${volume_data}/db2:/bitnami/postgresql`
-      ports:
-        - <- `0.0.0.0:5436:5432`
       image: bitnami/postgresql-repmgr
       image-tag: <- `${postgresql_image_tag}`
 
@@ -173,8 +165,6 @@ dbpool:
     pgpool:
       image: docker.io/bitnami/pgpool
       image-tag: <- `${pgpool_image_tag}`
-      ports:
-        - 5440:5432
   services:
     postgres-pgpool:
       container: pgpool
