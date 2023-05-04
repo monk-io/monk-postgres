@@ -4,68 +4,73 @@ namespace: postgresql-cluster
 postgres-common:
   metadata:
     name: PostgreSQL
-    description: PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
     website: https://www.postgresql.org
+    source: https://github.com/postgres
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
+    tags: PostgreSQL, database management system, open-source, object-relational, data types, indexing, query optimization, security, MVCC, community, Linux, Windows, macOS, programming languages, frameworks
+    description: |
+      PostgreSQL is a powerful open-source object-relational database management system (DBMS) that provides robustness, reliability, and performance to meet the demanding needs of enterprise-level applications. It was first released in 1989 and has since become one of the most popular and widely used relational databases in the world.
+
+      One of the key features of PostgreSQL is its flexibility, which allows it to be used in a wide range of applications, from small-scale projects to large, complex enterprise systems. It supports a wide range of data types, including arrays, hstore, and JSON, and provides advanced indexing and query optimization features to ensure fast and efficient data retrieval.
+
+      PostgreSQL also has a strong reputation for data security and integrity, with support for advanced security features like row-level security, data masking, and encryption. It also supports multi-version concurrency control (MVCC), which allows multiple transactions to access and modify data concurrently without interfering with each other.
+
+      In addition to its powerful features, PostgreSQL has a large and active community of developers and users who contribute to its development and provide support through forums, mailing lists, and other channels. It is available on multiple platforms, including Linux, Windows, and macOS, and can be used with a wide range of programming languages and frameworks, making it a versatile and reliable choice for database management in a wide range of applications.
+    private: true
   connections:
     db1:
       runnable: postgresql-cluster/db1
-      service: postgres-svc
+      service: postgres
     db2:
       runnable: postgresql-cluster/db2
-      service: postgres-svc
+      service: postgres
   variables:
-    postgres_password:
+    postgres_pass:
       env: POSTGRESQL_POSTGRES_PASSWORD
       type: string
-      value: adminpassword
-    db_username:
+      value: <- $postgres_password default("kaek6ChoJoo2ya6gach5Cuuzyi0Ko6OhPhaquu2weiNg5aizYeo6FohlshaeNg5p")
+    pdb_username:
       env: POSTGRESQL_USERNAME
       type: string
-      value: monk
-    db_password:
+      value: <- $db_user default("monk")
+    pdb_password:
       env: POSTGRESQL_PASSWORD
       type: string
-      value: monk
-    db_name:
+      value: <- $db_pass default("monk")
+    pdb_name:
       env: POSTGRESQL_DATABASE
       type: string
-      value: monk
+      value: <- $db_name default("monk")
     repl_password:
       env: REPMGR_PASSWORD
       type: string
-      value: monk
-    db1_host:
-      type: string
-      value: <- connection-hostname("db1") split(".dns.podman") join("")
-    db2_host:
-      type: string
-      value: <- connection-hostname("db2") split(".dns.podman") join("")
+      value: <- $repl_pass default("ahp6Qua0Theing6AIush6eeReiriph0OPhoo4gaWUa3aeX7uquohl5MidooF7Oad")
     primary_host:
       env: REPMGR_PRIMARY_HOST
       type: string
-      value: <- `${db1_host}`
+      value: <- connection-hostname("db1")
     primary_port:
       env: REPMGR_PRIMARY_PORT
       type: string
-      value: <- $db_repl_port
+      value: 5432
     repl_nodes:
       env: REPMGR_PARTNER_NODES
       type: string
-      value: <- `${db1_host},${db2_host}`
+      value: <- connection-hostname("db1") "," connection-hostname("db2") concat-all
     db_repl_port:
       env: REPMGR_PORT_NUMBER
       type: string
       value: 5432
-    volume_data:
-      type: string
-      value: <- `${monk-volume-path}/postgres`
   services:
-    postgres-svc:
+    postgres:
       container: postgres
-      port: <- `${db_repl_port}`
+      port: 5432
       protocol: tcp
+  containers:
+    postgres:
+      image: bitnami/postgresql-repmgr
+      image-tag: <- $postgres_version default("14")
 
 db1:
   defines: runnable
@@ -80,11 +85,11 @@ db1:
     network_name:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
-      value: <- `${db1_host}`
+      value: <- connection-hostname("db1")
   containers:
     postgres:
-      image: bitnami/postgresql-repmgr
-      image-tag: <- `${image_tag}`
+      paths:
+        - <- `${monk-volume-path}/postgresql/db1:/bitnami/postgresql`
 
 db2:
   defines: runnable
@@ -99,8 +104,8 @@ db2:
     network_name:
       env: REPMGR_NODE_NETWORK_NAME
       type: string
-      value: <- `${db2_host}`
+      value: <- connection-hostname("db2")
   containers:
     postgres:
-      image: bitnami/postgresql-repmgr
-      image-tag: <- `${image_tag}`
+      paths:
+        - <- `${monk-volume-path}/postgresql/db2:/bitnami/postgresql`
