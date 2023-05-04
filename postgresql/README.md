@@ -58,9 +58,9 @@ foo@bar:~$ monk run postgresql/db
           └─🔌 open 16.171.22.57:5435 (0.0.0.0:5435) -> 5432
 
 💡 You can inspect and manage your above stack with these commands:
-	monk logs (-f) local/postgresql/db - Inspect logs
-	monk shell     local/postgresql/db - Connect to the container's shell
-	monk do        local/postgresql/db/action_name - Run defined action (if exists)
+ monk logs (-f) local/postgresql/db - Inspect logs
+ monk shell     local/postgresql/db - Connect to the container's shell
+ monk do        local/postgresql/db/action_name - Run defined action (if exists)
 💡 Check monk help for more!
 ```
 
@@ -68,13 +68,11 @@ foo@bar:~$ monk run postgresql/db
 
 The variables are stack section in `redis.yml` file. You can quickly setup by editing the values here.
 
-| Variable          | Description                  | Default                      |
-| ----------------- | ---------------------------- | ---------------------------- |
-| image_tag         | Docker image tag             | 12.2                         |
-| postgres_password | Postgresql Password          | adminpassword                |
-| db_username       | Postgresql user name         | monk                         |
-| db_name           | postgresql db name           | monk                         |
-| volume_data       | Postgresql local volume path | ${monk-volume-path}/postgres |
+| Variable | Description   | Default |
+| -------- | ------------- | ------- |
+| db_user  | Db user       | monk    |
+| db_pass  | Db password   | monk    |
+| db_name  | Database name | monk    |
 
 ## Stop, remove and clean up workloads and templates
 
