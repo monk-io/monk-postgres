@@ -9,7 +9,7 @@ base:
     source: https://github.com/postgres
     publisher: monk.io
     icon: https://www.postgresql.org/media/img/about/press/elephant.png
-    tags: PostgreSQL, database management system, open-source, object-relational, data types, indexing, query optimization, security, MVCC, community, Linux, Windows, macOS, programming languages, frameworks
+    tags: frameworks, object-relational, indexing, data types, query optimization, postgresql, security, open-source, mvcc, community
     description: |
       PostgreSQL is a powerful open-source object-relational database management system (DBMS) that provides robustness, reliability, and performance to meet the demanding needs of enterprise-level applications. It was first released in 1989 and has since become one of the most popular and widely used relational databases in the world.
 
