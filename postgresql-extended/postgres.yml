@@ -1,0 +1,322 @@
+---
+namespace: postgresql-extended
+
+base:
+  defines: runnable
+  metadata:
+    name: PostgreSQL
+    website: https://www.postgresql.org
+    source: https://github.com/postgres
+    publisher: monk.io
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
+    tags: frameworks, object-relational, indexing, data types, query optimization, postgresql, security, open-source, mvcc, community
+    description: |
+      PostgreSQL is a powerful open-source object-relational database management system (DBMS) that provides robustness, reliability, and performance to meet the demanding needs of enterprise-level applications. It was first released in 1989 and has since become one of the most popular and widely used relational databases in the world.
+
+      One of the key features of PostgreSQL is its flexibility, which allows it to be used in a wide range of applications, from small-scale projects to large, complex enterprise systems. It supports a wide range of data types, including arrays, hstore, and JSON, and provides advanced indexing and query optimization features to ensure fast and efficient data retrieval.
+
+      PostgreSQL also has a strong reputation for data security and integrity, with support for advanced security features like row-level security, data masking, and encryption. It also supports multi-version concurrency control (MVCC), which allows multiple transactions to access and modify data concurrently without interfering with each other.
+
+      In addition to its powerful features, PostgreSQL has a large and active community of developers and users who contribute to its development and provide support through forums, mailing lists, and other channels. It is available on multiple platforms, including Linux, Windows, and macOS, and can be used with a wide range of programming languages and frameworks, making it a versatile and reliable choice for database management in a wide range of applications.
+    private: true
+  containers:
+    postgres:
+      image: bitnami/postgresql
+      image-tag: latest
+
+db:
+  defines: runnable
+  inherits: postgresql/base
+  metadata:
+    private: false
+  services:
+    postgres:
+      container: postgres
+      protocol: tcp
+      port: 5432
+      host-port: 5432
+  containers:
+    postgres:
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+  variables:
+    db_user:
+      env: POSTGRES_USER
+      type: string
+      value: monk
+    db_pass:
+      env: POSTGRES_PASSWORD
+      type: string
+      value: adminpassword
+    db_name:
+      env: POSTGRES_DB
+      type: string
+      value: monk
+    volume_dir:
+      env: POSTGRESQL_VOLUME_DIR
+      type: string
+      value: /bitnami/postgresql
+    data_dir:
+      env: POSTGRESQL_DATA_DIR
+      type: string
+      value: ${POSTGRESQL_VOLUME_DIR}/data
+    allow_remote_connections:
+      env: POSTGRESQL_ALLOW_REMOTE_CONNECTIONS
+      type: string
+      value: yes
+    replication_mode:
+      env: POSTGRESQL_REPLICATION_MODE
+      type: string
+      value: master
+    replication_user:
+      env: POSTGRESQL_REPLICATION_USER
+      type: string
+      value: repl_user
+    replication_password:
+      env: POSTGRESQL_REPLICATION_PASSWORD
+      type: string
+      value: repl_password
+    max_connections:
+      env: POSTGRESQL_MAX_CONNECTIONS
+      type: string
+      value: "100"
+    timezone:
+      env: POSTGRESQL_TIMEZONE
+      type: string
+      value: UTC
+    shared_preload_libraries:
+      env: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+      type: string
+      value: pgaudit
+    wal_level:
+      env: POSTGRESQL_WAL_LEVEL
+      type: string
+      value: replica
+    fsync:
+      env: POSTGRESQL_FSYNC
+      type: string
+      value: on
+    synchronous_commit_mode:
+      env: POSTGRESQL_SYNCHRONOUS_COMMIT_MODE
+      type: string
+      value: on
+    allow_empty_password:
+      env: ALLOW_EMPTY_PASSWORD
+      type: string
+      value: no
+    log_connections:
+      env: POSTGRESQL_LOG_CONNECTIONS
+      type: string
+      value: yes
+    log_disconnections:
+      env: POSTGRESQL_LOG_DISCONNECTIONS
+      type: string
+      value: yes
+    ldap_enable:
+      env: POSTGRESQL_ENABLE_LDAP
+      type: string
+      value: no
+    ldap_url:
+      env: POSTGRESQL_LDAP_URL
+      type: string
+      value: ""
+    ldap_base_dn:
+      env: POSTGRESQL_LDAP_BASE_DN
+      type: string
+      value: ""
+    tls_enable:
+      env: POSTGRESQL_ENABLE_TLS
+      type: string
+      value: no
+    tls_cert_file:
+      env: POSTGRESQL_TLS_CERT_FILE
+      type: string
+      value: /path/to/tls_cert_file
+    tls_key_file:
+      env: POSTGRESQL_TLS_KEY_FILE
+      type: string
+      value: /path/to/tls_key_file
+    client_min_messages:
+      env: POSTGRESQL_CLIENT_MIN_MESSAGES
+      type: string
+      value: error
+    statement_timeout:
+      env: POSTGRESQL_STATEMENT_TIMEOUT
+      type: string
+      value: "30000"
+    extra_flags:
+      env: POSTGRESQL_EXTRA_FLAGS
+      type: string
+      value: ""
+    init_max_timeout:
+      env: POSTGRESQL_INIT_MAX_TIMEOUT
+      type: string
+      value: "60"
+    pgctl_timeout:
+      env: POSTGRESQL_PGCTLTIMEOUT
+      type: string
+      value: "60"
+    shutdown_mode:
+      env: POSTGRESQL_SHUTDOWN_MODE
+      type: string
+      value: fast
+    cluster_app_name:
+      env: POSTGRESQL_CLUSTER_APP_NAME
+      type: string
+      value: walreceiver
+    initdb_args:
+      env: POSTGRESQL_INITDB_ARGS
+      type: string
+      value: ""
+    initdb_wal_dir:
+      env: POSTGRESQL_INITDB_WAL_DIR
+      type: string
+      value: ""
+    master_host:
+      env: POSTGRESQL_MASTER_HOST
+      type: string
+      value: ""
+    master_port_number:
+      env: POSTGRESQL_MASTER_PORT_NUMBER
+      type: string
+      value: "5432"
+    num_synchronous_replicas:
+      env: POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS
+      type: string
+      value: "0"
+    synchronous_replicas_mode:
+      env: POSTGRESQL_SYNCHRONOUS_REPLICAS_MODE
+      type: string
+      value: ""
+    port_number:
+      env: POSTGRESQL_PORT_NUMBER
+      type: string
+      value: "5432"
+    ldap_prefix:
+      env: POSTGRESQL_LDAP_PREFIX
+      type: string
+      value: ""
+    ldap_suffix:
+      env: POSTGRESQL_LDAP_SUFFIX
+      type: string
+      value: ""
+    ldap_server:
+      env: POSTGRESQL_LDAP_SERVER
+      type: string
+      value: ""
+    ldap_port:
+      env: POSTGRESQL_LDAP_PORT
+      type: string
+      value: ""
+    ldap_scheme:
+      env: POSTGRESQL_LDAP_SCHEME
+      type: string
+      value: ""
+    ldap_tls:
+      env: POSTGRESQL_LDAP_TLS
+      type: string
+      value: ""
+    ldap_bind_dn:
+      env: POSTGRESQL_LDAP_BIND_DN
+      type: string
+      value: ""
+    ldap_bind_password:
+      env: POSTGRESQL_LDAP_BIND_PASSWORD
+      type: string
+      value: ""
+    ldap_search_attr:
+      env: POSTGRESQL_LDAP_SEARCH_ATTR
+      type: string
+      value: ""
+    ldap_search_filter:
+      env: POSTGRESQL_LDAP_SEARCH_FILTER
+      type: string
+      value: ""
+    tls_ca_file:
+      env: POSTGRESQL_TLS_CA_FILE
+      type: string
+      value: ""
+    tls_crl_file:
+      env: POSTGRESQL_TLS_CRL_FILE
+      type: string
+      value: ""
+    tls_prefer_server_ciphers:
+      env: POSTGRESQL_TLS_PREFER_SERVER_CIPHERS
+      type: string
+      value: yes
+    pgaudit_log:
+      env: POSTGRESQL_PGAUDIT_LOG
+      type: string
+      value: ""
+    pgaudit_log_catalog:
+      env: POSTGRESQL_PGAUDIT_LOG_CATALOG
+      type: string
+      value: ""
+    pgaudit_log_parameter:
+      env: POSTGRESQL_PGAUDIT_LOG_PARAMETER
+      type: string
+      value: ""
+    log_hostname:
+      env: POSTGRESQL_LOG_HOSTNAME
+      type: string
+      value: ""
+    log_line_prefix:
+      env: POSTGRESQL_LOG_LINE_PREFIX
+      type: string
+      value: ""
+    log_timezone:
+      env: POSTGRESQL_LOG_TIMEZONE
+      type: string
+      value: ""
+    tcp_keepalives_idle:
+      env: POSTGRESQL_TCP_KEEPALIVES_IDLE
+      type: string
+      value: ""
+    tcp_keepalives_interval:
+      env: POSTGRESQL_TCP_KEEPALIVES_INTERVAL
+      type: string
+      value: ""
+    tcp_keepalives_count:
+      env: POSTGRESQL_TCP_KEEPALIVES_COUNT
+      type: string
+      value: ""
+    pghba_remove_filters:
+      env: POSTGRESQL_PGHBA_REMOVE_FILTERS
+      type: string
+      value: ""
+    username_connection_limit:
+      env: POSTGRESQL_USERNAME_CONNECTION_LIMIT
+      type: string
+      value: ""
+    postgres_connection_limit:
+      env: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
+      type: string
+      value: ""
+    default_toast_compression:
+      env: POSTGRESQL_DEFAULT_TOAST_COMPRESSION
+      type: string
+      value: ""
+    password_encryption:
+      env: POSTGRESQL_PASSWORD_ENCRYPTION
+      type: string
+      value: ""
+    default_transaction_isolation:
+      env: POSTGRESQL_DEFAULT_TRANSACTION_ISOLATION
+      type: string
+      value: ""
+    autoctl_conf_dir:
+      env: POSTGRESQL_AUTOCTL_CONF_DIR
+      type: string
+      value: ${POSTGRESQL_AUTOCTL_VOLUME_DIR}/.config
+    autoctl_mode:
+      env: POSTGRESQL_AUTOCTL_MODE
+      type: string
+      value: postgres
+    autoctl_monitor_host:
+      env: POSTGRESQL_AUTOCTL_MONITOR_HOST
+      type: string
+      value: monitor
+    autoctl_hostname:
+      env: POSTGRESQL_AUTOCTL_HOSTNAME
+      type: string
+      value: $(hostname --fqdn)
