@@ -35,10 +35,15 @@ db:
       protocol: tcp
       port: 5432
       host-port: 5432
+  volumes:
+    postgresql:
+      size: 100
+      type: SSD
+      path: <- `${monk-volume-path}/postgresql`
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+        - <- `${monk-volume-path}/postgresql:/bitnami/postgresql`
   variables:
     db_user:
       env: POSTGRES_USER
