@@ -1,2 +1,2 @@
 REPO postgres
-DIR postgresql postgresql-cluster postgresql-cluster-pgpool
+DIR postgresql postgresql-cluster postgresql-cluster-pgpool postgresql-extended
