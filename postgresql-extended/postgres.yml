@@ -1,8 +1,6 @@
----
 namespace: postgresql-extended
 
 base:
-  defines: runnable
   metadata:
     name: PostgreSQL
     website: https://www.postgresql.org
@@ -19,14 +17,11 @@ base:
 
       In addition to its powerful features, PostgreSQL has a large and active community of developers and users who contribute to its development and provide support through forums, mailing lists, and other channels. It is available on multiple platforms, including Linux, Windows, and macOS, and can be used with a wide range of programming languages and frameworks, making it a versatile and reliable choice for database management in a wide range of applications.
     private: true
-  containers:
-    postgres:
-      image: bitnami/postgresql
-      image-tag: latest
+
 
 db:
   defines: runnable
-  inherits: postgresql/base
+  inherits: postgresql-extended/base
   metadata:
     private: false
   services:
@@ -42,6 +37,8 @@ db:
       path: <- `${monk-volume-path}/postgresql`
   containers:
     postgres:
+      image: bitnami/postgresql
+      image-tag: latest
       paths:
         - <- `${monk-volume-path}/postgresql:/bitnami/postgresql`
   variables:
@@ -64,7 +61,7 @@ db:
     data_dir:
       env: POSTGRESQL_DATA_DIR
       type: string
-      value: ${POSTGRESQL_VOLUME_DIR}/data
+      value: /bitnami/postgresql/data
     allow_remote_connections:
       env: POSTGRESQL_ALLOW_REMOTE_CONNECTIONS
       type: string
