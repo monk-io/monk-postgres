@@ -69,7 +69,7 @@ postgres-common:
       protocol: tcp
   containers:
     postgres:
-      image: bitnami/postgresql-repmgr
+      image: bitnamilegacy/postgresql-repmgr
       image-tag: <- $postgres_version default("14")
 
 db1:
