@@ -37,7 +37,7 @@ db:
       path: <- `${monk-volume-path}/postgresql`
   containers:
     postgres:
-      image: bitnami/postgresql
+      image: bitnamilegacy/postgresql
       image-tag: latest
       paths:
         - <- `${monk-volume-path}/postgresql:/bitnami/postgresql`
