@@ -22,7 +22,7 @@ base:
   containers:
     postgres:
       image: postgres
-      image-tag: latest
+      image-tag: 17
 
 db:
   defines: runnable
@@ -37,6 +37,7 @@ db:
       host-port: 5432
   containers:
     postgres:
+      # postgresql 18+ uses /var/lib/postgresql instead of /var/lib/postgresql/data`
       paths:
         - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
   variables:
