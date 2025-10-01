@@ -22,7 +22,7 @@ base:
   containers:
     postgres:
       image: postgres
-      image-tag: 17
+      image-tag: "17"
 
 db:
   defines: runnable
