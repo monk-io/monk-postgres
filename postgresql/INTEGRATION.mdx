@@ -1,0 +1,87 @@
+---
+title: PostgreSQL
+description: Production-ready PostgreSQL runnable you can run directly or inherit to integrate a relational database into your stack.
+primary_category: database
+tags: [postgresql, postgres, database, sql, template, runnable]
+integration_type: template
+hosting_models: [self-hosted]
+website_url: https://www.postgresql.org/
+docs_url: https://www.postgresql.org/docs/
+publisher: monk.io
+---
+
+## Overview
+
+This template provides a PostgreSQL runnable exposing port 5432 with a persistent data volume. Use it directly for quick starts, or inherit it in your app and wire credentials via Monk secrets.
+
+## Quick start (run directly)
+
+```bash
+monk load MANIFEST
+monk run postgresql/db
+```
+
+Connect to `localhost:5432` with the default credentials from `postgres.yml`.
+
+## Configuration
+
+Key variables in `postgres.yml` (under `postgresql/db`):
+
+```yaml
+variables:
+  db_user: monk                 # env: POSTGRES_USER
+  db_pass: adminpassword        # env: POSTGRES_PASSWORD
+  db_name: monk                 # env: POSTGRES_DB
+```
+
+Note: When running the base template directly, values come from the template. For production, inherit and replace with Monk secrets.
+
+## Inherit and use secrets (recommended)
+
+```yaml
+namespace: myapp
+
+db:
+  defines: runnable
+  inherits: postgresql/db
+
+api:
+  defines: runnable
+  containers:
+    api:
+      image: myorg/api
+  connections:
+    database:
+      runnable: db
+      service: postgres
+  variables:
+    database-host:
+      value: <- connection-hostname("database")
+    database-user:
+      value: <- secret("db_user")
+    database-password:
+      value: <- secret("db_pass")
+    database-name:
+      value: <- secret("db_name")
+```
+
+Set secrets once, then run:
+
+```bash
+monk secrets add -g db_user="appuser"
+monk secrets add -g db_pass="STRONG_PASSWORD"
+monk secrets add -g db_name="appdb"
+
+monk run myapp/api
+```
+
+## Ports and persistence
+
+- Service: `postgres` on TCP `5432`
+- Data path: `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+
+## Troubleshooting
+
+- If you change credentials but reuse an existing data volume, authentication may fail; reset the volume or update the credentials inside the DB.
+- Ensure the host volume is writable by the container.
+
