@@ -69,7 +69,7 @@ db:
     replication_mode:
       env: POSTGRESQL_REPLICATION_MODE
       type: string
-      value: master
+      value: leader
     replication_user:
       env: POSTGRESQL_REPLICATION_USER
       type: string
