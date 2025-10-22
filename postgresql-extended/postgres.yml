@@ -174,12 +174,12 @@ db:
       env: POSTGRESQL_INITDB_WAL_DIR
       type: string
       value: ""
-    leader_host:
-      env: POSTGRESQL_LEADER_HOST
+    master_host:
+      env: POSTGRESQL_MASTER_HOST
       type: string
       value: ""
-    leader_port_number:
-      env: POSTGRESQL_LEADER_PORT_NUMBER
+    master_port_number:
+      env: POSTGRESQL_MASTER_PORT_NUMBER
       type: string
       value: "5432"
     num_synchronous_replicas:
