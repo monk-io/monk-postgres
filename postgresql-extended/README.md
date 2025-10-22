@@ -80,7 +80,7 @@ The variables are defined in the stack section of postgresql.yml. You can quickl
 | volume_dir                    | Base directory for persistence                     | /bitnami/postgresql                      |
 | data_dir                      | PostgreSQL data directory                          | ${volume_dir}/data                       |
 | allow_remote_connections      | Allow remote connections to the database           | yes                                      |
-| replication_mode              | Set replication mode (master, slave)               | master                                   |
+| replication_mode              | Set replication mode (leader, follower)            | leader                                   |
 | replication_user              | Replication user                                   | repl_user                                |
 | replication_password          | Password for replication user                      | repl_password                            |
 | max_connections               | Maximum connections allowed                        | 100                                      |
@@ -98,8 +98,8 @@ The variables are defined in the stack section of postgresql.yml. You can quickl
 | cluster_app_name              | Replication cluster default application name       | walreceiver                              |
 | initdb_args                   | Optional args for PostgreSQL initdb operation      | nil                                      |
 | initdb_wal_dir                | Optional init db wal directory                     | nil                                      |
-| master_host                   | PostgreSQL master host (used by slaves)            | nil                                      |
-| master_port_number            | PostgreSQL master host port (used by slaves)       | 5432                                     |
+| leader_host                   | PostgreSQL leader host (used by followers)         | nil                                      |
+| leader_port_number            | PostgreSQL leader host port (used by followers)    | 5432                                     |
 | num_synchronous_replicas      | Number of PostgreSQL replicas for sync replication | 0                                        |
 | synchronous_replicas_mode     | PostgreSQL synchronous replication mode            | nil                                      |
 | port_number                   | PostgreSQL port number                             | 5432                                     |

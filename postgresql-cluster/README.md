@@ -1,6 +1,6 @@
-# Postgresql Master Slave & Monk
+# Postgresql Leader Follower & Monk
 
-This repository contains Monk.io template to deploy Postgresql Master Slave cluster either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
+This repository contains Monk.io template to deploy Postgresql Leader Follower cluster either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
 ## Prerequisites
 
