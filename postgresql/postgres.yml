@@ -57,7 +57,7 @@ base:
   containers:
     postgres:
       image: postgres
-      image-tag: "17"
+      image-tag: latest
       bash: sh /usr/local/bin/entrypoint.sh
 
 db:
@@ -74,7 +74,8 @@ db:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+        - <- `${monk-volume-path}/postgresql:${internal-path}`
+      image-tag: <- $version
   variables:
     db_user:
       env: POSTGRES_USER
@@ -88,3 +89,10 @@ db:
       env: POSTGRES_DB
       type: string
       value: monk
+    version:
+      type: string
+      value: "18"
+    internal-path: 
+      type: string
+      value: <- $version to-i 17 eq? then("/var/lib/postgresql/data") default("/var/lib/postgresql")
+      
