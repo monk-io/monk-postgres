@@ -80,8 +80,16 @@ monk run myapp/api
 - Service: `postgres` on TCP `5432`
 - Data path: `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
 
+## Credential updates
+
+This template includes a custom entrypoint that automatically updates the database password when the `POSTGRES_PASSWORD` environment variable changes. Unlike the default PostgreSQL Docker image behavior (which only applies credentials on first initialization), this template ensures password changes take effect on existing databases.
+
+When the container starts:
+1. If an existing database is detected, the entrypoint updates the user password via `ALTER USER`
+2. If it's a fresh initialization, credentials are applied normally by the PostgreSQL image
+
 ## Troubleshooting
 
-- If you change credentials but reuse an existing data volume, authentication may fail; reset the volume or update the credentials inside the DB.
 - Ensure the host volume is writable by the container.
+- Check container logs (`monk logs postgresql/db`) if credential updates fail.
 

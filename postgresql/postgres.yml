@@ -19,10 +19,46 @@ base:
 
       In addition to its powerful features, PostgreSQL has a large and active community of developers and users who contribute to its development and provide support through forums, mailing lists, and other channels. It is available on multiple platforms, including Linux, Windows, and macOS, and can be used with a wide range of programming languages and frameworks, making it a versatile and reliable choice for database management in a wide range of applications.
     private: true
+  files:
+    entrypoint:
+      container: postgres
+      path: /usr/local/bin/entrypoint.sh
+      mode: 0755
+      contents: |
+        #!/bin/sh
+        set -e
+
+        DATA_DIR="${PGDATA:-/var/lib/postgresql/data}"
+
+        update_credentials() {
+            echo "Updating PostgreSQL credentials..."
+            SUPERUSER="${POSTGRES_USER:-postgres}"
+            gosu postgres pg_ctl -D "$DATA_DIR" -o "-c listen_addresses=''" -w start
+            if [ -n "$POSTGRES_PASSWORD" ]; then
+                gosu postgres psql -v ON_ERROR_STOP=1 --username "$SUPERUSER" --dbname template1 -c "ALTER USER \"$SUPERUSER\" WITH PASSWORD '$POSTGRES_PASSWORD';"
+                echo "Password updated for user: $SUPERUSER"
+            fi
+            gosu postgres pg_ctl -D "$DATA_DIR" -m fast -w stop
+            echo "Credentials update complete."
+        }
+
+        if [ -s "$DATA_DIR/PG_VERSION" ]; then
+            echo "Existing database detected. Checking credentials..."
+            update_credentials
+        else
+            echo "Fresh database initialization. Credentials will be set by docker-entrypoint.sh"
+        fi
+
+        if [ $# -eq 0 ]; then
+            exec docker-entrypoint.sh postgres
+        else
+            exec docker-entrypoint.sh "$@"
+        fi
   containers:
     postgres:
       image: postgres
       image-tag: "17"
+      bash: sh /usr/local/bin/entrypoint.sh
 
 db:
   defines: runnable
@@ -37,7 +73,6 @@ db:
       host-port: 5432
   containers:
     postgres:
-      # postgresql 18+ uses /var/lib/postgresql instead of /var/lib/postgresql/data`
       paths:
         - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
   variables:
