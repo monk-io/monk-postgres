@@ -54,28 +54,24 @@ base:
         else
             exec docker-entrypoint.sh "$@"
         fi
-  containers:
-    postgres:
-      image: postgres
-      image-tag: latest
-      bash: sh /usr/local/bin/entrypoint.sh
-
-db:
-  defines: runnable
-  inherits: postgresql/base
-  metadata:
-    private: false
   services:
     postgres:
       container: postgres
       protocol: tcp
       port: 5432
-      host-port: 5432
+  checks:
+    readiness:
+      code: <- `exec("postgres", "pg_isready", "-U", "${db_user}") contains?("accepting connections")`
+      period: 5
+      initialDelay: 5
+      attempts: 12
   containers:
     postgres:
-      paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+      image: postgres
       image-tag: <- $version
+      bash: sh /usr/local/bin/entrypoint.sh
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql`
   variables:
     db_user:
       env: POSTGRES_USER
@@ -89,6 +85,20 @@ db:
       env: POSTGRES_DB
       type: string
       value: monk
+    version:
+      type: string
+      value: "latest"
+
+db:
+  defines: runnable
+  inherits: postgresql/base
+  metadata:
+    private: false
+  containers:
+    postgres:
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+  variables:
     version:
       type: string
       value: "17"
@@ -98,30 +108,11 @@ db-v15:
   inherits: postgresql/base
   metadata:
     private: false
-  services:
-    postgres:
-      container: postgres
-      protocol: tcp
-      port: 5432
-      host-port: 5432
   containers:
     postgres:
       paths:
         - <- `${monk-volume-path}/postgresql-v15:/var/lib/postgresql/data`
-      image-tag: <- $version
   variables:
-    db_user:
-      env: POSTGRES_USER
-      type: string
-      value: monk
-    db_pass:
-      env: POSTGRES_PASSWORD
-      type: string
-      value: adminpassword
-    db_name:
-      env: POSTGRES_DB
-      type: string
-      value: monk
     version:
       type: string
       value: "15"
@@ -131,30 +122,11 @@ db-v16:
   inherits: postgresql/base
   metadata:
     private: false
-  services:
-    postgres:
-      container: postgres
-      protocol: tcp
-      port: 5432
-      host-port: 5432
   containers:
     postgres:
       paths:
         - <- `${monk-volume-path}/postgresql-v16:/var/lib/postgresql/data`
-      image-tag: <- $version
   variables:
-    db_user:
-      env: POSTGRES_USER
-      type: string
-      value: monk
-    db_pass:
-      env: POSTGRES_PASSWORD
-      type: string
-      value: adminpassword
-    db_name:
-      env: POSTGRES_DB
-      type: string
-      value: monk
     version:
       type: string
       value: "16"
@@ -164,30 +136,11 @@ db-v17:
   inherits: postgresql/base
   metadata:
     private: false
-  services:
-    postgres:
-      container: postgres
-      protocol: tcp
-      port: 5432
-      host-port: 5432
   containers:
     postgres:
       paths:
         - <- `${monk-volume-path}/postgresql-v17:/var/lib/postgresql/data`
-      image-tag: <- $version
   variables:
-    db_user:
-      env: POSTGRES_USER
-      type: string
-      value: monk
-    db_pass:
-      env: POSTGRES_PASSWORD
-      type: string
-      value: adminpassword
-    db_name:
-      env: POSTGRES_DB
-      type: string
-      value: monk
     version:
       type: string
       value: "17"
@@ -197,30 +150,97 @@ db-v18:
   inherits: postgresql/base
   metadata:
     private: false
-  services:
-    postgres:
-      container: postgres
-      protocol: tcp
-      port: 5432
-      host-port: 5432
-  containers:
-    postgres:
-      paths:
-        - <- `${monk-volume-path}/postgresql-v18:/var/lib/postgresql`
-      image-tag: <- $version
   variables:
-    db_user:
-      env: POSTGRES_USER
-      type: string
-      value: monk
-    db_pass:
-      env: POSTGRES_PASSWORD
-      type: string
-      value: adminpassword
-    db_name:
-      env: POSTGRES_DB
-      type: string
-      value: monk
     version:
       type: string
       value: "18"
+      
+client:
+  defines: runnable
+  metadata:
+    name: PostgreSQL Client
+    description: PostgreSQL client that connects to all database versions and verifies connectivity
+    private: false
+  connections:
+    db-v15:
+      runnable: postgresql/db-v15
+      service: postgres
+    db-v16:
+      runnable: postgresql/db-v16
+      service: postgres
+    db-v17:
+      runnable: postgresql/db-v17
+      service: postgres
+    db-v18:
+      runnable: postgresql/db-v18
+      service: postgres
+  files:
+    check-connection:
+      container: client
+      path: /usr/local/bin/check-connection.sh
+      mode: 0755
+      contents: |
+        #!/bin/sh
+        set -e
+
+        echo "========================================"
+        echo "Checking PostgreSQL v15 at $DB_V15_HOST..."
+        echo "========================================"
+        PGPASSWORD="$PGPASSWORD" psql -h "$DB_V15_HOST" -p 5432 -U "$PGUSER" -d "$PGDATABASE" -c "SELECT version();"
+        echo ""
+
+        echo "========================================"
+        echo "Checking PostgreSQL v16 at $DB_V16_HOST..."
+        echo "========================================"
+        PGPASSWORD="$PGPASSWORD" psql -h "$DB_V16_HOST" -p 5432 -U "$PGUSER" -d "$PGDATABASE" -c "SELECT version();"
+        echo ""
+
+        echo "========================================"
+        echo "Checking PostgreSQL v17 at $DB_V17_HOST..."
+        echo "========================================"
+        PGPASSWORD="$PGPASSWORD" psql -h "$DB_V17_HOST" -p 5432 -U "$PGUSER" -d "$PGDATABASE" -c "SELECT version();"
+        echo ""
+
+        echo "========================================"
+        echo "Checking PostgreSQL v18 at $DB_V18_HOST..."
+        echo "========================================"
+        PGPASSWORD="$PGPASSWORD" psql -h "$DB_V18_HOST" -p 5432 -U "$PGUSER" -d "$PGDATABASE" -c "SELECT version();"
+        echo ""
+
+        echo "========================================"
+        echo "All connections successful!"
+        echo "========================================"
+  containers:
+    client:
+      image: postgres
+      image-tag: "17"
+      bash: sh /usr/local/bin/check-connection.sh
+  variables:
+    db_v15_host:
+      env: DB_V15_HOST
+      type: string
+      value: <- connection-hostname("db-v15")
+    db_v16_host:
+      env: DB_V16_HOST
+      type: string
+      value: <- connection-hostname("db-v16")
+    db_v17_host:
+      env: DB_V17_HOST
+      type: string
+      value: <- connection-hostname("db-v17")
+    db_v18_host:
+      env: DB_V18_HOST
+      type: string
+      value: <- connection-hostname("db-v18")
+    db_user:
+      env: PGUSER
+      type: string
+      value: monk
+    db_pass:
+      env: PGPASSWORD
+      type: string
+      value: adminpassword
+    db_name:
+      env: PGDATABASE
+      type: string
+      value: monk
