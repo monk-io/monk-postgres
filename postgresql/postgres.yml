@@ -74,7 +74,7 @@ db:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql`
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
       image-tag: <- $version
   variables:
     db_user:
@@ -91,7 +91,7 @@ db:
       value: monk
     version:
       type: string
-      value: "latest"
+      value: "17"
 
 db-v15:
   defines: runnable
