@@ -107,7 +107,7 @@ db-v15:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+        - <- `${monk-volume-path}/postgresql-v15:/var/lib/postgresql/data`
       image-tag: <- $version
   variables:
     db_user:
@@ -140,7 +140,7 @@ db-v16:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+        - <- `${monk-volume-path}/postgresql-v16:/var/lib/postgresql/data`
       image-tag: <- $version
   variables:
     db_user:
@@ -173,7 +173,7 @@ db-v17:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+        - <- `${monk-volume-path}/postgresql-v17:/var/lib/postgresql/data`
       image-tag: <- $version
   variables:
     db_user:
@@ -206,7 +206,7 @@ db-v18:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql`
+        - <- `${monk-volume-path}/postgresql-v18:/var/lib/postgresql`
       image-tag: <- $version
   variables:
     db_user:
