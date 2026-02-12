@@ -74,7 +74,139 @@ db:
   containers:
     postgres:
       paths:
-        - <- `${monk-volume-path}/postgresql:${internal-path}`
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql`
+      image-tag: <- $version
+  variables:
+    db_user:
+      env: POSTGRES_USER
+      type: string
+      value: monk
+    db_pass:
+      env: POSTGRES_PASSWORD
+      type: string
+      value: adminpassword
+    db_name:
+      env: POSTGRES_DB
+      type: string
+      value: monk
+    version:
+      type: string
+      value: "latest"
+
+db-v15:
+  defines: runnable
+  inherits: postgresql/base
+  metadata:
+    private: false
+  services:
+    postgres:
+      container: postgres
+      protocol: tcp
+      port: 5432
+      host-port: 5432
+  containers:
+    postgres:
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+      image-tag: <- $version
+  variables:
+    db_user:
+      env: POSTGRES_USER
+      type: string
+      value: monk
+    db_pass:
+      env: POSTGRES_PASSWORD
+      type: string
+      value: adminpassword
+    db_name:
+      env: POSTGRES_DB
+      type: string
+      value: monk
+    version:
+      type: string
+      value: "15"
+
+db-v16:
+  defines: runnable
+  inherits: postgresql/base
+  metadata:
+    private: false
+  services:
+    postgres:
+      container: postgres
+      protocol: tcp
+      port: 5432
+      host-port: 5432
+  containers:
+    postgres:
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+      image-tag: <- $version
+  variables:
+    db_user:
+      env: POSTGRES_USER
+      type: string
+      value: monk
+    db_pass:
+      env: POSTGRES_PASSWORD
+      type: string
+      value: adminpassword
+    db_name:
+      env: POSTGRES_DB
+      type: string
+      value: monk
+    version:
+      type: string
+      value: "16"
+
+db-v17:
+  defines: runnable
+  inherits: postgresql/base
+  metadata:
+    private: false
+  services:
+    postgres:
+      container: postgres
+      protocol: tcp
+      port: 5432
+      host-port: 5432
+  containers:
+    postgres:
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
+      image-tag: <- $version
+  variables:
+    db_user:
+      env: POSTGRES_USER
+      type: string
+      value: monk
+    db_pass:
+      env: POSTGRES_PASSWORD
+      type: string
+      value: adminpassword
+    db_name:
+      env: POSTGRES_DB
+      type: string
+      value: monk
+    version:
+      type: string
+      value: "17"
+
+db-v18:
+  defines: runnable
+  inherits: postgresql/base
+  metadata:
+    private: false
+  services:
+    postgres:
+      container: postgres
+      protocol: tcp
+      port: 5432
+      host-port: 5432
+  containers:
+    postgres:
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql`
       image-tag: <- $version
   variables:
     db_user:
@@ -92,7 +224,3 @@ db:
     version:
       type: string
       value: "18"
-    internal-path: 
-      type: string
-      value: <- $version to-i 17 eq? then("/var/lib/postgresql/data") default("/var/lib/postgresql")
-      
