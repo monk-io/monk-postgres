@@ -70,9 +70,6 @@ base:
       image: postgres
       image-tag: <- $version
       bash: sh /usr/local/bin/entrypoint.sh
-      mounted-volumes:
-        postgres-data:
-          path: /var/lib/postgresql
   volumes:
     postgres-data:
       kind: local
@@ -100,9 +97,8 @@ db:
     private: false
   containers:
     postgres:
-      mounted-volumes:
-        postgres-data:
-          path: /var/lib/postgresql/data
+      paths:
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
   variables:
     version:
       type: string
