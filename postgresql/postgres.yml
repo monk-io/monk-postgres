@@ -70,8 +70,9 @@ base:
       image: postgres
       image-tag: <- $version
       bash: sh /usr/local/bin/entrypoint.sh
-      paths:
-        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql`
+  volumes:
+    postgres-data:
+      kind: local
   variables:
     db_user:
       env: POSTGRES_USER
@@ -110,8 +111,9 @@ db-v15:
     private: false
   containers:
     postgres:
-      paths:
-        - <- `${monk-volume-path}/postgresql-v15:/var/lib/postgresql/data`
+      mounted-volumes:
+        postgres-data:
+          path: /var/lib/postgresql/data
   variables:
     version:
       type: string
@@ -124,8 +126,9 @@ db-v16:
     private: false
   containers:
     postgres:
-      paths:
-        - <- `${monk-volume-path}/postgresql-v16:/var/lib/postgresql/data`
+      mounted-volumes:
+        postgres-data:
+          path: /var/lib/postgresql/data
   variables:
     version:
       type: string
@@ -138,8 +141,9 @@ db-v17:
     private: false
   containers:
     postgres:
-      paths:
-        - <- `${monk-volume-path}/postgresql-v17:/var/lib/postgresql/data`
+      mounted-volumes:
+        postgres-data:
+          path: /var/lib/postgresql/data
   variables:
     version:
       type: string
@@ -152,8 +156,9 @@ db-v18:
     private: false
   containers:
     postgres:
-      paths:
-        - <- `${monk-volume-path}/postgresql-v18:/var/lib/postgresql`
+      mounted-volumes:
+        postgres-data:
+          path: /var/lib/postgresql
   variables:
     version:
       type: string
